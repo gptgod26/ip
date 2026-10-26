@@ -1,0 +1,483 @@
+IMAGE PROCESSING LAB — CODE CELLS
+Extracted from the uploaded IP_Lab notebook.
+Image/video files referenced in the code must be in the working directory.
+
+======================================================================
+1. We have 6 pixel (3 x 2) camera. Generate all the possible images. Assume black and white camera.
+======================================================================
+
+
+# CODE CELL 1
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+plt.figure(figsize=(10, 10))
+for i in range(64):
+    img = np.array([int(x) for x in format(i, '06b')])
+    img = img.reshape(2, 3)
+
+    plt.subplot(8,8,i+1)
+    plt.imshow(img, cmap='gray', vmin=0, vmax=1)
+    plt.title(f'Image {i}')
+    plt.axis('on')
+    plt.yticks([])
+    plt.xticks([])
+
+plt.suptitle("All 64 Possible Binary Images")
+
+plt.show()
+
+
+======================================================================
+2. We have 9 pixel (3 x 3) camera. Randomly fill in the matrix entries. Display the matrix as an image. Repeat it till you get a sensible image. Assume black and white camera.
+======================================================================
+
+
+# CODE CELL 2
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+while True:
+    img = np.random.choice([0, 255], (3, 3))
+    print(img)
+
+    plt.imshow(img, cmap='gray', vmin=0, vmax=255)
+    plt.axis('off')
+    plt.show()
+
+    sensible = input("Sensible image? (y/n): ")
+
+    if sensible.lower() == 'y':
+        break
+
+
+======================================================================
+3. Assume a (5 x 5) binary matrix. Generate five different charcaters of your mother tongue. NO English charcters.
+======================================================================
+
+
+# CODE CELL 3
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+characters = [
+    [
+        [1,1,1,0,1],
+        [0,0,1,0,1],
+        [1,1,1,1,1],
+        [1,0,1,0,1],
+        [1,1,1,0,1]
+    ],
+    [
+        [1,1,1,1,1],
+        [1,0,0,1,0],
+        [1,0,0,1,0],
+        [1,1,0,1,0],
+        [1,1,0,1,0]
+    ],
+    [
+        [1,0,0,0,1],
+        [1,0,0,0,1],
+        [1,0,0,0,1],
+        [1,0,0,0,1],
+        [1,1,1,1,1]
+    ],
+    [
+        [1,0,1,1,1],
+        [1,0,1,0,1],
+        [1,0,1,0,1],
+        [1,0,1,0,1],
+        [1,1,1,1,1]
+    ],
+    [
+        [1,1,1,1,1],
+        [1,0,0,1,0],
+        [1,1,1,1,1],
+        [1,0,0,1,0],
+        [1,1,1,1,0]
+    ]
+]
+
+plt.figure(figsize=(8,2))
+
+for i in range(5) :
+  plt.subplot(1,5,i+1)
+  plt.imshow(characters[i], cmap='gray', vmin=0, vmax=1)
+  plt.xticks([])
+  plt.yticks([])
+
+plt.suptitle("Tamil Alphabets")
+plt.show()
+
+
+======================================================================
+4. Get a coin, and keep it on the desk. Use your mobile camera to capture the coin image. Keep your camera perpendicular to the coin. Measure the capturing distance. Repeat it for 10 different distances. You have 10 images. Compute the percentage area occupied by the coin in the images. Plot the capturing distance versus percentage area occupied by the coin as a graph.
+======================================================================
+
+
+======================================================================
+5. Get an image and read it as a matrix. Try to access a random pixel and generate its 8 neighbourhood submatrix. Also pull out a sub matrix corresponding to 16 neighbourhood.
+======================================================================
+
+
+# CODE CELL 4
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+import random
+
+image = cv2.imread("qn5.jpeg")[:,:,0]
+print(image.shape)
+pixel_x = random.randint(0,image.shape[0]-4)
+pixel_y = random.randint(0,image.shape[1]-4)
+
+print(f"Chosen pixel: ({pixel_x},{pixel_y})")
+
+neighbour_8 = image[pixel_x-1:pixel_x+2,pixel_y-1:pixel_y+2].copy()
+neighbour_8[1,1]=0
+neighbour_16 = image[pixel_x-2:pixel_x+3,pixel_y-2:pixel_y+3].copy()
+neighbour_16[2,2]=0
+
+plt.figure(figsize=(10,10))
+plt.subplot(1,2,1)
+plt.title(f'8 Neighbourhood of Pixel ({pixel_x},{pixel_y})')
+plt.imshow(neighbour_8, cmap='gray', vmin=0, vmax=255)
+plt.xticks([])
+plt.yticks([])
+
+plt.subplot(1,2,2)
+plt.title(f'16 Neighbourhood of Pixel ({pixel_x},{pixel_y})')
+plt.imshow(neighbour_16, cmap='gray', vmin=0, vmax=255)
+plt.xticks([])
+plt.yticks([])
+
+plt.show()
+
+
+======================================================================
+6. Get an image of a square. Generate its negative image.
+======================================================================
+
+
+# CODE CELL 5
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+image = cv2.imread('qn6.jpg')[:,:,0]
+
+negative_image = 255 - image
+
+plt.figure(figsize=(10,10))
+
+plt.subplot(1,2,1)
+plt.title('Original Image')
+plt.imshow(image, cmap='gray', vmin=0, vmax=255)
+plt.xticks([])
+plt.yticks([])
+
+plt.subplot(1,2,2)
+plt.title('Negative Image')
+plt.imshow(negative_image, cmap='gray', vmin=0, vmax=255)
+plt.xticks([])
+plt.yticks([])
+
+plt.show()
+
+
+======================================================================
+7. Draw parallel lines in your note book. Using a camera try to capture these lines, from various perspective angles.
+======================================================================
+
+
+======================================================================
+8. Take a selfie of (your face only). Try various power law transformations. Refer slides on "Basic Intensity Transofrmations"
+======================================================================
+
+
+# CODE CELL 6
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('qn8.jpg', 0)
+r = img / 255.0
+
+gammas = [0.33,0.67,1,1.33,1.67]
+plt.figure(figsize=(10,3))
+for i in range(len(gammas)) :
+    gamma = gammas[i]
+    transformed = (255 * r**gamma).astype(np.uint8)
+    plt.subplot(1,5,i+1)
+    plt.imshow(transformed, cmap='gray')
+    plt.title(f'Gamma = {gamma}')
+    plt.xticks([])
+    plt.yticks([])
+
+plt.suptitle("Various Power Law (Gamma) Transformations")
+plt.show()
+
+
+======================================================================
+9. Get an image with many nonoverlapping circles (same size) (if your reg no is divisble by 2) Get an image with many nonoverlapping squares (same size) (if your reg no is divisble by 3) or Get an image with many nonoverlapping triangles (same size) (if your reg no is not divisble by 3 or not divisible by 2). Choose a propoer convolutional kernal and generate the convolution output.
+======================================================================
+
+
+# CODE CELL 7
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+image = cv2.imread('qn9.png', 0)
+
+filter = np.array([
+ [-1,-1,-1],
+ [-1,8,-1],
+ [-1,-1,-1]
+], dtype=np.float32)
+
+output = cv2.filter2D(image, -1, filter)
+
+plt.figure(figsize=(10,10))
+
+plt.subplot(1,2,1)
+plt.title("Original Image")
+plt.imshow(image, cmap='gray')
+plt.xticks([])
+plt.yticks([])
+
+plt.subplot(1,2,2)
+plt.title("Convolution Output")
+plt.imshow(output, cmap='gray')
+plt.xticks([])
+plt.yticks([])
+
+plt.show()
+
+
+======================================================================
+10. Get your selfie. Read it as image matrix. Intentionally add a noise matrix with your original image (Gaussian distribution, with mean = 110 and sigma = 5). Let us call the resultanant image as noisy image. Try to remove the noise by applying a (5x5) averaging filter/kernel. Let this be receovered image. Compare recovered image and the original image. Report the result in terms of MSE (mean square error)
+======================================================================
+
+
+# CODE CELL 8
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+image = cv2.imread('selfie.jpg', 0)
+
+noise = np.random.normal(110, 5, image.shape)
+noisy_image = image + noise
+
+kernel = np.array([
+    [1/9,1/9,1/9],
+    [1/9,1/9,1/9],
+    [1/9,1/9,1/9]
+], dtype=np.float32)
+
+recovered_image = cv2.filter2D(noisy_image, -1, kernel)
+
+mse=np.mean((image - recovered_image)**2)
+print(f"MSE: {mse}")
+
+plt.figure(figsize=(10,10))
+
+plt.subplot(1,3,1)
+plt.imshow(image,cmap='gray')
+plt.xticks([])
+plt.yticks([])
+plt.title('Original Image')
+
+plt.subplot(1,3,2)
+plt.imshow(noisy_image,cmap='gray')
+plt.xticks([])
+plt.yticks([])
+plt.title('Noisy Image')
+
+plt.subplot(1,3,3)
+plt.imshow(recovered_image,cmap='gray')
+plt.xticks([])
+plt.yticks([])
+plt.title('Recovered Image')
+
+plt.show()
+
+
+======================================================================
+11. Take your selfie image. Use the rotational matrix operator, scaling matrix operator ans shear matrix operator on the image. List the challenges you face and record your results. DO NOT USE READYMADE functions/libraries/algorithms. You have to use the operartor matrices explicitly.
+======================================================================
+
+
+# CODE CELL 9
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('qn11.jpg', 0)
+h, w = img.shape
+
+R = np.array([[0, -1], [1, 0]])       # Rotation: 90 degrees
+S = np.array([[2, 0], [0, 2]])        # Scaling
+H = np.array([[1, 0.5], [0, 1]])      # Shearing
+
+def transform(A):
+    out = np.zeros_like(img)
+    inv = np.linalg.inv(A)
+
+    for y in range(h):
+        for x in range(w):
+            p = np.array([x-w//2, y-h//2])
+            q = np.round(inv @ p + [w//2, h//2]).astype(int)
+            u, v = q
+
+            if 0 <= u < w and 0 <= v < h:
+                out[y, x] = img[v, u]
+
+    return out
+
+plt.figure(figsize=(10, 7))
+
+plt.subplot(2, 2, 1)
+plt.imshow(img, cmap='gray')
+plt.title('Original')
+plt.axis('off')
+
+plt.subplot(2, 2, 2)
+plt.imshow(transform(R), cmap='gray')
+plt.title('Rotation')
+plt.axis('off')
+
+plt.subplot(2, 2, 3)
+plt.imshow(transform(S), cmap='gray')
+plt.title('Scaling')
+plt.axis('off')
+
+plt.subplot(2, 2, 4)
+plt.imshow(transform(H), cmap='gray')
+plt.title('Shearing')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+
+
+======================================================================
+12. Record a video clip of (around 30 sec) a leaf using your mobile camera, with out shaking your hands. Track the pixel cordinates (rwo and column number) of the leaf apex from frame to frame. Now there are two time series signals, (i) row cooridnate as a function of frame number, and (ii) column cooridnate as a function of frame number. Apply 1D-FFT separetely on these signals, and apply 2D FFT.
+======================================================================
+
+
+# CODE CELL 10
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read video and track leaf apex
+cap = cv2.VideoCapture('qn12.mp4')
+rows, cols = [], []
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    plt.figure()
+    plt.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    plt.title('Leaf Frame')
+    plt.axis('off')
+    plt.show()
+
+    r = int(input("Enter apex row: "))
+    c = int(input("Enter apex column: "))
+    rows.append(r)
+    cols.append(c)
+
+    if input("Continue? (y/n): ").lower() != 'y':
+        break
+
+cap.release()
+
+# 1D FFT of row and column coordinates
+rows = np.array(rows)
+cols = np.array(cols)
+
+R = np.fft.fft(rows - np.mean(rows))
+C = np.fft.fft(cols - np.mean(cols))
+
+# Read a frame for 2D FFT
+img = cv2.imread('leaf_frame.jpg', 0)
+F = np.fft.fft2(img)
+Fshift = np.fft.fftshift(F)
+spectrum = np.log(1 + np.abs(Fshift))
+
+# Display all results
+plt.figure(figsize=(10, 8))
+
+plt.subplot(2, 2, 1)
+plt.plot(np.abs(R))
+plt.title('1D FFT - Row')
+plt.xlabel('Frequency')
+
+plt.subplot(2, 2, 2)
+plt.plot(np.abs(C))
+plt.title('1D FFT - Column')
+plt.xlabel('Frequency')
+
+plt.subplot(2, 2, 3)
+plt.imshow(img, cmap='gray')
+plt.title('Original Image')
+plt.axis('off')
+
+plt.subplot(2, 2, 4)
+plt.imshow(spectrum, cmap='gray')
+plt.title('2D FFT Spectrum')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+
+
+======================================================================
+13. Visit the site https://stringartgenerator.cc/#google_vignette ; - The site reconstructs the upoladed image using only straight line.s Try with different images to generate the string art. Based on the histograms of the images, infer the quality of the reconstructed image. Try to apply histogram equalization on the image and then try to reconstruct.
+======================================================================
+
+
+# CODE CELL 11
+
+import cv2
+import matplotlib.pyplot as plt
+
+img = cv2.imread('image.jpg', 0)
+equalized = cv2.equalizeHist(img)
+
+plt.subplot(2, 2, 1)
+plt.imshow(img, cmap='gray')
+plt.title('Original')
+
+plt.subplot(2, 2, 2)
+plt.hist(img.ravel(), 256, [0, 256])
+plt.title('Original Histogram')
+
+plt.subplot(2, 2, 3)
+plt.imshow(equalized, cmap='gray')
+plt.title('Equalized Image')
+
+plt.subplot(2, 2, 4)
+plt.hist(equalized.ravel(), 256, [0, 256])
+plt.title('Equalized Histogram')
+
+plt.tight_layout()
+plt.show()
+
+cv2.imwrite('equalized.jpg', equalized)
